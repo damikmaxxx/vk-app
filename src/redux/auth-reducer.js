@@ -1,7 +1,7 @@
-import { firebaseAPI } from "../api/api";
+import { firebaseAPI, DB_USER_MONEY,DB_USER_ROKET,DB_USER_HOUSE,DB_USER_PEOPLE,DB_USER_FOOD  } from "../api/api";
 import { CHANGE_MONEY,CHANGE_HOUSE,CHANGE_PEOPLE,CHANGE_ROKET } from './inventory-reducer';
-import {changeInventory} from "./inventory-reducer"
-
+import {changeInventory,setInventory} from "./inventory-reducer"
+import { getUserId } from "./user-reducer";
 const SET_INIT_SUCCESS = "AUTH/SET_INIT_SUCCESS"
 const SET_ACCESS_TOKEN = "AUTH/SET_ACCESS_TOKEN"
 let init = {
@@ -27,7 +27,7 @@ export const authReducer = (state = init, action) => {
 };
 
 
-export const setInitSuccess = () => {
+export const setInitSuccess = (func = null) => {
     return {
       type:SET_INIT_SUCCESS,
     };
@@ -40,26 +40,36 @@ export const setAccessToken = (token) => {
 };
 
 export const  getDbInventory =  (user) => async (dispatch) =>  {
-    await firebaseAPI.getUser(user.id).then((snapshot) => {   
-        let val = snapshot.val()
-        if (!val) return
-        Object.keys(val).map(key => {
-            switch(key){
-                case "money":
-                    dispatch(changeInventory(CHANGE_MONEY,val.money,"set"))
-                    break
-                case "roket":
-                    dispatch(changeInventory(CHANGE_ROKET,val.roket,"set"))
-                    break
-                case "house":
-                    dispatch(changeInventory(CHANGE_HOUSE,val.house,"set"))
-                    break
-                case "people":
-                    dispatch(changeInventory(CHANGE_PEOPLE,val.people,"set"))
-                    break    
+    await firebaseAPI.getUser(user.id).then((snapshot) => { 
+        let val = snapshot.val() 
+        let initDate = {
+            money:1000,
+            house:2,
+            people:5,
+            roket:5,
+            food:100,
+        }
+
+        if (!val){
+            dispatch(setInventory(initDate))
+            return
+        } 
+        Object.keys(initDate).forEach(key => {
+            if((key in val) == false){
+                val[key] = initDate[key]
             }
-            
+                
         })
+        dispatch(setInventory(val))
         return
+    })
+};
+export const  setDbInventory =  (user,inventory) => async (dispatch) =>  {
+    await firebaseAPI.updateFullUser(user.id,{
+        [DB_USER_MONEY]:inventory.money,
+        [DB_USER_ROKET]:inventory.roket,
+        [DB_USER_HOUSE]:inventory.house,
+        [DB_USER_PEOPLE]:inventory.people,
+        [DB_USER_FOOD]:inventory.food,
     })
 };

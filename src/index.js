@@ -10,8 +10,6 @@ import "firebase/database";
 
 
 //7903112
-//OwS8Cm5E7l0yf2uYNpTG
-//15a5f62915a5f62915a5f6299a15dd61a1115a515a5f629754b4a0d53820af1f76a1670
 
 // Init VK  Mini App
 bridge.send("VKWebAppInit");

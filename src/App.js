@@ -3,13 +3,13 @@ import bridge from '@vkontakte/vk-bridge';
 import { View, ScreenSpinner, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { connect } from "react-redux";
-import {changeInventory} from "./redux/inventory-reducer"
+import {changeInventory, CHANGE_MONEY} from "./redux/inventory-reducer"
 import {setFriends} from "./redux/user-reducer"
 import {setUser} from "./redux/user-reducer"
 
 
 //descriprion
-import { HOUSE_DESCRIPTION, MONEY_DESCRIPTION, PEOPLE_DESCRIPTION, ROKET_DESCRIPTION } from './text/Description';
+import { HOUSE_DESCRIPTION, MONEY_DESCRIPTION, PEOPLE_DESCRIPTION, ROKET_DESCRIPTION,FOOD_DESCRIPTION } from './text/Description';
 
 import Home from './panels/Home';
 import Persik from './panels/Persik';
@@ -20,14 +20,16 @@ import ActionNavigator from './panels/Action/ActionNavigator';
 import Attack from './panels/Action/Attack/Attack';
 import DescriptionCreator from './creator/DescriptionCreator';
 
-import { firebaseAPI, DB_USER_MONEY,DB_USER_ROKET,DB_USER_HOUSE,DB_USER_PEOPLE } from './api/api';
-import { getDbInventory, setAccessToken, setInitSuccess } from './redux/auth-reducer';
+import { firebaseAPI } from './api/api';
+import { getDbInventory, setAccessToken, setInitSuccess,setDbInventory } from './redux/auth-reducer';
 
+import { getBDTimeUser, getServerTime, setTimer } from './redux/time-reducer';
+import TimerCreator from './creator/TimerCreator';
 const APP_ID = 7903112;
 const App = (props) => {
 	const [activePanel, setActivePanel] = useState('base');
+	const [giveGold, setGiveGold] = useState(null);
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
-	
 	useEffect(() => {
 		bridge.subscribe(({ detail: { type, data }}) => {
 			if (type === 'VKWebAppUpdateConfig') {
@@ -50,39 +52,70 @@ const App = (props) => {
 			props.setFriends(userFriends.response.items)
 			
 			await props.getDbInventory(user)
-			setPopout(null);
+			await props.getBDTimeUser(user)
+			await props.getServerTime()
 			props.setInitSuccess()
+			setPopout(null);
+			
 		}
 		fetchData();
 		
 		
-
+		
 	}, []);
+	
+	useEffect(() => {
+		async function initTimer() {
+			if (!props.entryTime) return
+			let diff = props.entryTime - props.oldEntryTime
+			setGiveGold(TimerCreator({"name":"giveGold","time":1*20*1000,"user":props.user,"repeat":true},() => {
+				props.changeInventory(CHANGE_MONEY,+10)
+			}))
+			props.setTimer(10*60*1000)
+		}
+		initTimer()
+		
+			
+	},[props.entryTime])
 	useEffect(() => {
 		if (props.init){
-			firebaseAPI.updateFullUser(props.user.id,{
-				[DB_USER_MONEY]:props.money,
-				[DB_USER_ROKET]:props.roket,
-				[DB_USER_HOUSE]:props.house,
-				[DB_USER_PEOPLE]:props.people,
-			})
+			
+			props.setDbInventory(props.user,props.inventory)
+			// firebaseAPI.updateEntryTimeBD(props.user.id,props.entryTime)
+			// let diff = props.entryTime - props.oldEntryTime
+			// giveGold.decrease(diff)
 		}
 	})
 	const go = e => {
 		setActivePanel(e.currentTarget.dataset.to);
 	};
+
 	//DescriptionCreator creates group with description
-	const MoneyDesc  =  DescriptionCreator({what:"Money",desc:MONEY_DESCRIPTION})
-	const PeopleDesc =  DescriptionCreator({what:"People",desc:PEOPLE_DESCRIPTION})
-	const HouseDesc  =  DescriptionCreator({what:"House",desc:HOUSE_DESCRIPTION})
-	const RoketDesc  =  DescriptionCreator({what:"Roket",desc:ROKET_DESCRIPTION})
+	const DescriptionPanels = {
+		MoneyDesc	:DescriptionCreator({what:"Money",desc:MONEY_DESCRIPTION}),
+		PeopleDesc	:DescriptionCreator({what:"People",desc:PEOPLE_DESCRIPTION}),
+		HouseDesc	:DescriptionCreator({what:"House",desc:HOUSE_DESCRIPTION}),
+		RoketDesc	:DescriptionCreator({what:"Roket",desc:ROKET_DESCRIPTION}),
+		FoodDesc	:DescriptionCreator({what:"Food",desc:FOOD_DESCRIPTION}),
+	}
+	const DescPanelsBlocks = Object.keys(DescriptionPanels).map(key => {
+		const DescPanel = DescriptionPanels[key];
+		const name = String(key)
+		const id = name.charAt(0).toLowerCase() + name.slice(1);
+		return(
+			<DescPanel {...props} id={id}  go={go}/>
+		)
+		
+	})
+	
+
 	return (
 		<AdaptivityProvider>
 			<AppRoot>
 				<View activePanel={activePanel} popout={popout}>
 					<Home {...props} id='home'  go={go} />
 					<Base {...props} id='base'  go={go} />
-					<Inventory id='inventory'  go={go} />
+					<Inventory {...props} id='inventory'  go={go} />
 					<Friends {...props} id='friends'  go={go} />
 
 					{/* Action Navigator */}
@@ -90,10 +123,7 @@ const App = (props) => {
 					<Attack {...props} id='attack'  go={go}/>
 
 					{/* Descriprion */}
-					<MoneyDesc {...props} id='moneyDesc'  go={go}/>
-					<PeopleDesc {...props} id='peopleDesc'  go={go}/>
-					<HouseDesc {...props} id='houseDesc'  go={go}/>
-					<RoketDesc {...props} id='roketDesc'  go={go}/>
+					{DescPanelsBlocks}
 				</View>
 			</AppRoot>
 		</AdaptivityProvider>
@@ -101,14 +131,12 @@ const App = (props) => {
 }
 
 let mapStateToProps = (state) => ({
-    money:state.inventoryPage.money,
-    roket:state.inventoryPage.roket,
-    house:state.inventoryPage.house,
-    people:state.inventoryPage.people,
-
+	inventory:state.inventoryPage,
+	entryTime:state.time.entry,
+	oldEntryTime:state.time.oldEntry,
 	friends:state.usersInfo.friends,
 	user:state.usersInfo.user,
 	init:state.auth.init,
 })
 
-export default connect(mapStateToProps,{changeInventory,setFriends,setUser,setInitSuccess,getDbInventory,setAccessToken})(App)
+export default connect(mapStateToProps,{setDbInventory,changeInventory,setFriends,setUser,setInitSuccess,getDbInventory,setAccessToken,getServerTime,getBDTimeUser,setTimer})(App)
