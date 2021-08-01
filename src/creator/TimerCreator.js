@@ -16,12 +16,9 @@ async function TimerCreator({user,name,time,repeat,consoleView},func) {
     const CreateTimerBD =  async () => {
         _time = time
         await GetServerTime()
-        await firebaseAPI.getTimerDB(user.id).then((snapshot) => {
-            let val = snapshot.val()
-            firebaseAPI.updateTimerDB(user.id,name,DB_TIMER_START,entry) 
-            firebaseAPI.updateTimerDB(user.id,name,DB_TIMER_TIME,time)
-            TimerFunc()
-        }) 
+        firebaseAPI.updateTimerDB(user.id,name,DB_TIMER_START,entry) 
+        firebaseAPI.updateTimerDB(user.id,name,DB_TIMER_TIME,time)
+        TimerFunc() 
     }
     const TimerFunc = async () => {
             GetServerTime()
