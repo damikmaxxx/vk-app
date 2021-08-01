@@ -1,14 +1,10 @@
-
-import React, { useState } from 'react';
-import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar,PanelHeaderBack, CardGrid, Card } from '@vkontakte/vkui';
-import { Icon24DollarCircleOutline } from '@vkontakte/icons';
-import HeaderUp from '../components/Header/HeaderUp';
 import { firebaseAPI,DB_TIMER_START, DB_TIMER_TIME } from '../api/api';
 
-async function TimerCreator({user,name,time,repeat},func) {
+async function TimerCreator({user,name,time,repeat,consoleView},func) {
     let _time = time
     let oneTimer = true
     let entry = null
+    let diff = 0
     const GetServerTime =   async () => {
         await firebaseAPI.getServerTime().on('value', function(offset) {
             const offsetVal = offset.val() || 0;
@@ -23,27 +19,25 @@ async function TimerCreator({user,name,time,repeat},func) {
         await firebaseAPI.getTimerDB(user.id).then((snapshot) => {
             let val = snapshot.val()
             firebaseAPI.updateTimerDB(user.id,name,DB_TIMER_START,entry) 
-            firebaseAPI.updateTimerDB(user.id,name,DB_TIMER_TIME,_time)
+            firebaseAPI.updateTimerDB(user.id,name,DB_TIMER_TIME,time)
             TimerFunc()
         }) 
     }
-    const TimerFunc = async (val = null) => {
-        if(val  &&  val.giveGold){
+    const TimerFunc = async () => {
             GetServerTime()
-            let diff = val.giveGold.startTimer + val.giveGold.timerTime - entry
-            _time = diff   
-        }
+            _time = time - diff   
             let timer = setInterval(() => {
                 _time -= 1000
-                console.log("Осталось: "+ _time/1000 + "сек")     
+                if(consoleView){ console.log("Осталось: "+ _time/1000 + "сек") }    
                 if(_time <= 0){
                     func()
                     if (!repeat){
                         clearInterval(timer);
                     }
                     else{
+                        diff = 0
                         clearInterval(timer);
-                        CreateTimerBD(val)
+                        CreateTimerBD()
                     }
                     
                 }
@@ -55,18 +49,25 @@ async function TimerCreator({user,name,time,repeat},func) {
 
         await firebaseAPI.getTimerDB(user.id).then((snapshot) => { 
             let val = snapshot.val()
-            if(!val.giveGold){
-                CreateTimerBD(val)
+            if(!val[name]){
+                CreateTimerBD()
                 return 
             }  
-            if (val.giveGold.startTimer + val.giveGold.timerTime <= entry){
+            
+            
+            if (val[name].startTimer + val[name].timerTime <= entry){
                 func()
-                if (repeat){
-                    CreateTimerBD(val)
+                diff = - (val[name].startTimer + val[name].timerTime - entry)
+                if (!repeat) return
+                while (diff > time){
+                    func()
+                    diff -= time
                 }
+                    CreateTimerBD()
             }
             else{
-                TimerFunc(val)
+                diff = time - (val[name].startTimer + val[name].timerTime - entry)
+                TimerFunc()
             }
         })
     return 

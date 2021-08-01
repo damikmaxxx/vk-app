@@ -3,7 +3,7 @@ import bridge from '@vkontakte/vk-bridge';
 import { View, ScreenSpinner, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { connect } from "react-redux";
-import {changeInventory, CHANGE_MONEY} from "./redux/inventory-reducer"
+import {changeInventory, CHANGE_MONEY,CHANGE_ROKET} from "./redux/inventory-reducer"
 import {setFriends} from "./redux/user-reducer"
 import {setUser} from "./redux/user-reducer"
 
@@ -23,7 +23,6 @@ import DescriptionCreator from './creator/DescriptionCreator';
 import { firebaseAPI } from './api/api';
 import { getDbInventory, setAccessToken, setInitSuccess,setDbInventory } from './redux/auth-reducer';
 
-import { getBDTimeUser, getServerTime, setTimer } from './redux/time-reducer';
 import TimerCreator from './creator/TimerCreator';
 const APP_ID = 7903112;
 const App = (props) => {
@@ -52,8 +51,6 @@ const App = (props) => {
 			props.setFriends(userFriends.response.items)
 			
 			await props.getDbInventory(user)
-			await props.getBDTimeUser(user)
-			await props.getServerTime()
 			props.setInitSuccess()
 			setPopout(null);
 			
@@ -66,17 +63,18 @@ const App = (props) => {
 	
 	useEffect(() => {
 		async function initTimer() {
-			if (!props.entryTime) return
-			let diff = props.entryTime - props.oldEntryTime
-			setGiveGold(TimerCreator({"name":"giveGold","time":1*20*1000,"user":props.user,"repeat":true},() => {
+			if (!props.init) return
+			setGiveGold(TimerCreator({"name":"increaseMoney","time":1*20*1000,"user":props.user,"repeat":true,"consoleView":true},() => {
 				props.changeInventory(CHANGE_MONEY,+10)
 			}))
-			props.setTimer(10*60*1000)
+			// setGiveGold(TimerCreator({"name":"increaseRoket","time":1*20*1000,"user":props.user,"repeat":true},() => {
+			// 	props.changeInventory(CHANGE_ROKET,+1)
+			// }))
 		}
 		initTimer()
 		
 			
-	},[props.entryTime])
+	},[props.init])
 	useEffect(() => {
 		if (props.init){
 			
@@ -132,11 +130,9 @@ const App = (props) => {
 
 let mapStateToProps = (state) => ({
 	inventory:state.inventoryPage,
-	entryTime:state.time.entry,
-	oldEntryTime:state.time.oldEntry,
 	friends:state.usersInfo.friends,
 	user:state.usersInfo.user,
 	init:state.auth.init,
 })
 
-export default connect(mapStateToProps,{setDbInventory,changeInventory,setFriends,setUser,setInitSuccess,getDbInventory,setAccessToken,getServerTime,getBDTimeUser,setTimer})(App)
+export default connect(mapStateToProps,{setDbInventory,changeInventory,setFriends,setUser,setInitSuccess,getDbInventory,setAccessToken})(App)
