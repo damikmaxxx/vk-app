@@ -19,7 +19,9 @@ export  const firebaseAPI = {
     updateEntryTimeBD(userId,time){
         firebase.database().ref(String(userId)).child("time").child("timer").update({"entry":time});
     },
+    // firstCreateTimer(userId){
 
+    // }
     updateTimerDB(userId,timerName,info,time){
         firebase.database().ref(String(userId)).child("time").child("timer").child(timerName).update({[info]:time});
     },

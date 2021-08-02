@@ -46,10 +46,13 @@ async function TimerCreator({user,name,time,repeat,consoleView},func) {
 
         await firebaseAPI.getTimerDB(user.id).then((snapshot) => { 
             let val = snapshot.val()
-            if(!val[name]){
+
+            if(!val || !val[name]){
                 CreateTimerBD()
                 return 
             }  
+           
+            
             
             
             if (val[name].startTimer + val[name].timerTime <= entry){
