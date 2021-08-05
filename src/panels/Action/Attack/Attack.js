@@ -5,14 +5,14 @@ import { Icon24DollarCircleOutline } from '@vkontakte/icons';
 import { connect } from 'react-redux';
 import AttackFriends from './AttackFriends';
 import AttackOther from './AttackOther';
-import HeaderUp from '../../../components/Header/HeaderUp';
+import HeaderUser from '../../../components/Header/HeaderUser';
 
 
 const Attack = ({go,id,friends}) => {
 	const [activeTabs,setActiveTabs] = useState('friends');
 	return(
 	<Panel id={id}>
-        <HeaderUp go={go}  headerName="Attack" backButton="actionNavigator"/>
+        <HeaderUser go={go}  headerName="Attack" backButton="actionNavigator"/>
         <Group header={<Header mode="secondary">Attack</Header>}>
 			<Tabs>
 				<TabsItem selected={activeTabs === "friends"} onClick={() => {
@@ -23,10 +23,10 @@ const Attack = ({go,id,friends}) => {
 				<TabsItem selected={activeTabs === "other"} onClick={() => {
 					setActiveTabs("other")
 				}}>
-					Другие 
+					other 
 				</TabsItem>
 			</Tabs>
-			{activeTabs === "friends" && <AttackFriends friends={friends}/> }
+			{activeTabs === "friends" && <AttackFriends go={go} friends={friends}/> }
 			{activeTabs === "other" && <AttackOther/>}
         </Group> 
         

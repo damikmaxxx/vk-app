@@ -25,7 +25,7 @@ async function TimerCreator({user,name,time,repeat,consoleView},func) {
             _time = time - diff   
             let timer = setInterval(() => {
                 _time -= 1000
-                if(consoleView){ console.log("Осталось: "+ _time/1000 + "сек") }    
+                // console.log("Осталось: "+ _time/1000 + "сек")
                 if(_time <= 0){
                     func()
                     if (!repeat){

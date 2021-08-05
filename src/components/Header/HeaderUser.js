@@ -5,29 +5,29 @@ import { connect } from 'react-redux';
 import {changeInventory} from "../../redux/inventory-reducer"
 import {setFriends} from "../../redux/user-reducer"
 import {setUser} from "../../redux/user-reducer"
-const HeaderUp = (props) =>{
+const HeaderUser = ({go,backButton,headerName,user,money}) =>{
     return(
             <>
-            {props.backButton ? 
+            {backButton ? 
             <PanelHeader
-                left={<PanelHeaderBack onClick={props.go} data-to={props.backButton}/>}
+                left={<PanelHeaderBack onClick={go} data-to={backButton}/>}
             >
-                {props.headerName}
+                {headerName}
             </PanelHeader>
             :
             <PanelHeader>
-                {props.headerName}
+                {headerName}
             </PanelHeader>
             }
         
-            {props.user &&
+            {user &&
             <Group header={<Header mode="secondary">Your profile</Header>}>
                 <Cell 
-                    before={props.user.photo_200 ? <Avatar src={props.user.photo_200}/> : null}
-                    description={props.user.city && props.user.city.title ? props.user.city.title : ''}
-                    after={<div style={{display:'flex',alignItems:'center',color:'black'}}>{props.money}<Icon24DollarCircleOutline width={30} height={30}/></div>}
+                    before={user.photo_200 ? <Avatar src={user.photo_200}/> : null}
+                    description={user.city && user.city.title ? user.city.title : ''}
+                    after={<div style={{display:'flex',alignItems:'center',color:'black'}}>{money}<Icon24DollarCircleOutline width={30} height={30}/></div>}
                 >
-                    {`${props.user.first_name} ${props.user.last_name}`}
+                    {`${user.first_name} ${user.last_name}`}
                 </Cell>
             </Group>}
             </>
@@ -35,8 +35,8 @@ const HeaderUp = (props) =>{
 } 
 
 let mapStateToProps = (state) => ({
-    money:state.inventoryPage.money,
+    money:state.myInventory.money,
 	user:state.usersInfo.user
 })
 
-export default connect(mapStateToProps)(HeaderUp)
+export default connect(mapStateToProps)(HeaderUser)

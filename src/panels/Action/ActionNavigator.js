@@ -3,7 +3,7 @@ import * as axios from "axios";
 import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar,PanelHeaderBack } from '@vkontakte/vkui';
 import { Icon24DollarCircleOutline } from '@vkontakte/icons';
 import { CHANGE_MONEY,CHANGE_ROKET } from '../../redux/inventory-reducer';
-import HeaderUp from '../../components/Header/HeaderUp';
+import HeaderUser from '../../components/Header/HeaderUser';
 
 
 const ActionNavigator = ({changeInventory,go,id}) => {
@@ -16,7 +16,7 @@ const ActionNavigator = ({changeInventory,go,id}) => {
 	}
 	return(
 	<Panel id={id}>
-        <HeaderUp  go={go}headerName="Action Navigator" backButton="base"/>
+        <HeaderUser  go={go}headerName="Action Navigator" backButton="base"/>
         <Group header={<Header mode="secondary">Your actions</Header>}>
             <Div>
 				<Button stretched size="l"  onClick={() => onChangeMoney(-10)}>

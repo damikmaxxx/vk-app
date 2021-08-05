@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar,PanelHeaderBack, InfoRow, SimpleCell, Card, CardGrid, Link } from '@vkontakte/vkui';
-import roket from '../img/roket.png';
-import persik from '../img/persik.png';
 import { Icon24DollarCircleOutline } from '@vkontakte/icons';
 import { Icon44SmileOutline } from '@vkontakte/icons';
 import { Icon24HomeOutline } from '@vkontakte/icons';
 import { Icon24SendOutline } from '@vkontakte/icons';
 import { Icon28MortarOutline } from '@vkontakte/icons';
-import HeaderUp from '../components/Header/HeaderUp';
+import HeaderUser from '../components/Header/HeaderUser';
 
 import { connect } from "react-redux";
 
@@ -29,7 +27,7 @@ const Inventory = ({ id, go,inventory }) => {
     const inv = Object.keys(inventory).map(key =>{
         const Pic = PictureName[key]
         return(
-            <Group onClick={go} data-to={key + "Desc"}>
+            <Group key={key} onClick={go} data-to={key + "Desc"}>
                 <SimpleCell>
                 <Header mode="secondary">{key}</Header>
                 <Div><div style={{display:'flex',alignItems:'center'}}>{inventory[key]}<Pic width={ImgSize.width} height={ImgSize.height}/></div>  </Div>
@@ -40,8 +38,8 @@ const Inventory = ({ id, go,inventory }) => {
     })
     return(          
         
-            <Panel id={id}>
-            <HeaderUp go={go}  headerName="Inventory" backButton="base"/>
+        <Panel id={id}>
+            <HeaderUser go={go}  headerName="Inventory" backButton="base"/>
             {inv}
         </Panel>
         );
@@ -50,7 +48,7 @@ const Inventory = ({ id, go,inventory }) => {
 
 let mapStateToProps = (state) => ({
 	init:state.auth.init,
-    inventory:state.inventoryPage
+    inventory:state.myInventory
 })
 
 export default connect(mapStateToProps)(Inventory)

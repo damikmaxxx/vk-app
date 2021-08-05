@@ -1,10 +1,10 @@
 import React from 'react';
 import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar,PanelHeaderBack, CardGrid, Card } from '@vkontakte/vkui';
-import HeaderUp from '../components/Header/HeaderUp';
+import HeaderUser from '../components/Header/HeaderUser';
 const DescriptionCreator = (create) => {																																																																																										
     return ({id,go}) => (
 		<Panel id={id}>		
-			<HeaderUp go={go}  headerName={create.what} backButton="inventory"/>
+			<HeaderUser go={go}  headerName={create.what} backButton="inventory"/>
 
 				<Group header={<Header mode="secondary">decription</Header>}>
                     <Div>

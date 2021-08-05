@@ -1,19 +1,34 @@
 import React, { useState } from 'react';
-import { Group, Card,CardGrid } from '@vkontakte/vkui';
+import { Group, Card,CardGrid, RichCell, Avatar } from '@vkontakte/vkui';
 import { Icon24DollarCircleOutline } from '@vkontakte/icons';
+import { connect } from 'react-redux';
+import { setActiveUserPage } from '../../../redux/user-reducer';
 
-const AttackFriends = ({friends}) => {
-	const cardFriends	= friends.map(u =><Card key={u.id}>{<div><img  style={{width:"100%",height:"200px"}} src={u.photo_200_orig}/></div>}</Card>)	
+const AttackFriends = ({friends,go,setActiveUserPage}) => {
+	const entryFriendsProfile = (e,id) => {
+		setActiveUserPage(id)
+		go(e)
+	}
+	
+	const friendsGroup	= friends.map(u =>(
+		<RichCell  onClick={(e) => entryFriendsProfile(e,u.id)}
+			data-to="pageView"
+			key={u.id}
+			before={<Avatar size={48} src={u.photo_200_orig} />}
+			caption="info"
+			after="700 ₽"
+			>
+				{u.first_name +" "+ u.last_name}
+		</RichCell>
+	))
 	return(
         <Group>
-            <Group>
-					<CardGrid size="s">
-						{cardFriends}
-					</CardGrid>
-				</Group>
+						{friendsGroup}
         </Group>
 	)
 };
-
-
-export default AttackFriends
+const mapStateToProps  = (state) => ({
+	friends:state.usersInfo.friends,
+})
+export default connect(mapStateToProps,{setActiveUserPage})(AttackFriends)
+// export default AttackFriends

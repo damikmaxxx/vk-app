@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar } from '@vkontakte/vkui';
-import HeaderUp from '../components/Header/HeaderUp';
+import HeaderUser from '../components/Header/HeaderUser';
 const Home = ({ id, go, fetchedUser }) => (
 	<Panel id={id}>
-		<HeaderUp headerName="Home"/>
+		<HeaderUser headerName="Home"/>
 
 		<Group header={<Header mode="secondary">Navigation</Header>}>
 			<Div>

@@ -4,6 +4,13 @@ import {changeInventory,setInventory} from "./inventory-reducer"
 import { getUserId } from "./user-reducer";
 const SET_INIT_SUCCESS = "AUTH/SET_INIT_SUCCESS"
 const SET_ACCESS_TOKEN = "AUTH/SET_ACCESS_TOKEN"
+export const INIT_DATE = {
+    money:1000,
+    house:2,
+    people:5,
+    roket:5,
+    food:100,
+}
 let init = {
     init:false,
     accessToken:null,
@@ -42,21 +49,14 @@ export const setAccessToken = (token) => {
 export const  getDbInventory =  (user) => async (dispatch) =>  {
     await firebaseAPI.getUser(user.id).then((snapshot) => { 
         let val = snapshot.val() 
-        let initDate = {
-            money:1000,
-            house:2,
-            people:5,
-            roket:5,
-            food:100,
-        }
 
         if (!val){
-            dispatch(setInventory(initDate))
+            dispatch(setInventory(INIT_DATE))
             return
         } 
-        Object.keys(initDate).forEach(key => {
+        Object.keys(INIT_DATE).forEach(key => {
             if((key in val) == false){
-                val[key] = initDate[key]
+                val[key] = INIT_DATE[key]
             }
                 
         })

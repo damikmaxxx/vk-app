@@ -24,9 +24,11 @@ import { firebaseAPI } from './api/api';
 import { getDbInventory, setAccessToken, setInitSuccess,setDbInventory } from './redux/auth-reducer';
 
 import TimerCreator from './creator/TimerCreator';
+import AttackUserPage from './panels/Action/Attack/AttackUserPage';
+import PageView from './panels/PageView/PageView';
+import { go } from './redux/app-reducer';
 const APP_ID = 7903112;
 const App = (props) => {
-	const [activePanel, setActivePanel] = useState('base');
 	const [giveGold, setGiveGold] = useState(null);
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
 	useEffect(() => {
@@ -64,12 +66,9 @@ const App = (props) => {
 	useEffect(() => {
 		async function initTimer() {
 			if (!props.init) return
-			setGiveGold(TimerCreator({"name":"increaseMoney","time":1*20*1000,"user":props.user,"repeat":true,"consoleView":true},() => {
+			setGiveGold(TimerCreator({"name":"increaseMoney","time":1*20*1000,"user":props.user,"repeat":true},() => {
 				props.changeInventory(CHANGE_MONEY,+10)
 			}))
-			// setGiveGold(TimerCreator({"name":"increaseRoket","time":1*20*1000,"user":props.user,"repeat":true},() => {
-			// 	props.changeInventory(CHANGE_ROKET,+1)
-			// }))
 		}
 		initTimer()
 		
@@ -79,15 +78,9 @@ const App = (props) => {
 		if (props.init){
 			
 			props.setDbInventory(props.user,props.inventory)
-			// firebaseAPI.updateEntryTimeBD(props.user.id,props.entryTime)
-			// let diff = props.entryTime - props.oldEntryTime
-			// giveGold.decrease(diff)
 		}
 	})
-	const go = e => {
-		setActivePanel(e.currentTarget.dataset.to);
-	};
-
+	
 	//DescriptionCreator creates group with description
 	const DescriptionPanels = {
 		MoneyDesc	:DescriptionCreator({what:"Money",desc:MONEY_DESCRIPTION}),
@@ -101,25 +94,23 @@ const App = (props) => {
 		const name = String(key)
 		const id = name.charAt(0).toLowerCase() + name.slice(1);
 		return(
-			<DescPanel {...props} id={id}  go={go}/>
+			<DescPanel key={id} {...props} id={id}  go={props.go}/>
 		)
 		
 	})
-	
-
 	return (
 		<AdaptivityProvider>
 			<AppRoot>
-				<View activePanel={activePanel} popout={popout}>
-					<Home {...props} id='home'  go={go} />
-					<Base {...props} id='base'  go={go} />
-					<Inventory {...props} id='inventory'  go={go} />
-					<Friends {...props} id='friends'  go={go} />
+				<View activePanel={props.activePanel} popout={popout}>
+					<Home {...props} id='home'  go={props.go} />
+					<Base {...props} id='base'  go={props.go} />
+					<Inventory {...props} id='inventory'  go={props.go} />
+					<Friends {...props} id='friends'  go={props.go} />
 
 					{/* Action Navigator */}
-					<ActionNavigator {...props} id='actionNavigator'  go={go}/>
-					<Attack {...props} id='attack'  go={go}/>
-
+					<ActionNavigator {...props} id='actionNavigator'  go={props.go}/>
+					<Attack {...props} id='attack'  go={props.go}/>
+					<PageView {...props} id='pageView'   go={props.go}/>
 					{/* Descriprion */}
 					{DescPanelsBlocks}
 				</View>
@@ -129,10 +120,12 @@ const App = (props) => {
 }
 
 let mapStateToProps = (state) => ({
-	inventory:state.inventoryPage,
+	inventory:state.myInventory,
+	activeUserPage:state.usersInfo.activeUserPage,
 	friends:state.usersInfo.friends,
 	user:state.usersInfo.user,
 	init:state.auth.init,
+	activePanel:state.appPage.activePanel,
 })
 
-export default connect(mapStateToProps,{setDbInventory,changeInventory,setFriends,setUser,setInitSuccess,getDbInventory,setAccessToken})(App)
+export default connect(mapStateToProps,{setDbInventory,changeInventory,setFriends,setUser,setInitSuccess,getDbInventory,setAccessToken,go})(App)
