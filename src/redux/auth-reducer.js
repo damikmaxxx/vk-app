@@ -46,8 +46,8 @@ export const setAccessToken = (token) => {
     };
 };
 
-export const  getDbInventory =  (user) => async (dispatch) =>  {
-    await firebaseAPI.getUserInventory(user.id).then((snapshot) => { 
+export const  getDbInventory =  (userId) => async (dispatch) =>  {
+    await firebaseAPI.getUserInventory(userId).then((snapshot) => { 
         let val = snapshot.val() 
         if (!val){
             dispatch(setInventory(INIT_DATE))
@@ -64,8 +64,8 @@ export const  getDbInventory =  (user) => async (dispatch) =>  {
         return
     })
 };
-export const  setDbInventory =  (user,inventory) => async (dispatch) =>  {
-    await firebaseAPI.updateFullUser(user.id,{
+export const  setDbInventory =  (userId,inventory) => async (dispatch) =>  {
+    await firebaseAPI.updateFullUser(userId,{
         [DB_USER_MONEY]:inventory.money,
         [DB_USER_ROKET]:inventory.roket,
         [DB_USER_HOUSE]:inventory.house,

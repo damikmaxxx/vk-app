@@ -3,7 +3,7 @@ import bridge from '@vkontakte/vk-bridge';
 import { View, ScreenSpinner, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { connect } from "react-redux";
-import {changeInventory, CHANGE_MONEY,CHANGE_ROKET} from "./redux/inventory-reducer"
+import {changeInventory, CHANGE_MONEY,CHANGE_ROKET, setInventory} from "./redux/inventory-reducer"
 import {setFriends} from "./redux/user-reducer"
 import {setUser} from "./redux/user-reducer"
 
@@ -22,7 +22,7 @@ import DescriptionCreator from './creator/DescriptionCreator';
 
 import { firebaseAPI } from './api/api';
 import { getDbInventory, setAccessToken, setInitSuccess,setDbInventory } from './redux/auth-reducer';
-
+import firebase from './index';
 import TimerCreator from './creator/TimerCreator';
 import AttackUserPage from './panels/Action/Attack/AttackUserPage';
 import PageView from './panels/PageView/PageView';
@@ -52,7 +52,10 @@ const App = (props) => {
 			const userFriends = await bridge.send("VKWebAppCallAPIMethod", {"method": "friends.get", "params": {"fields":"nickname,photo_200_orig","v":"5.131", "access_token":userInfo.access_token,}});
 			props.setFriends(userFriends.response.items)
 			
-			await props.getDbInventory(user)
+			await props.getDbInventory(user.id)
+
+			
+
 			props.setInitSuccess()
 			setPopout(null);
 			
@@ -64,22 +67,25 @@ const App = (props) => {
 	}, []);
 	
 	useEffect(() => {
+		if (!props.init) return
 		async function initTimer() {
-			if (!props.init) return
+			
 			setGiveGold(TimerCreator({"name":"increaseMoney","time":1*20*1000,"user":props.user,"repeat":true},() => {
 				props.changeInventory(CHANGE_MONEY,+10)
 			}))
 		}
 		initTimer()
-		
-			
+		firebaseAPI.listenUpdateUser(props.user.id,props.setInventory)
+		debugger
 	},[props.init])
 	useEffect(() => {
 		if (props.init){
-			
-			props.setDbInventory(props.user,props.inventory)
+			props.setDbInventory(props.user.id,props.inventory)
 		}
 	})
+
+
+
 	
 	//DescriptionCreator creates group with description
 	const DescriptionPanels = {
@@ -126,4 +132,4 @@ let mapStateToProps = (state) => ({
 	activePanel:state.appPage.activePanel,
 })
 
-export default connect(mapStateToProps,{setDbInventory,changeInventory,setFriends,setUser,setInitSuccess,getDbInventory,setAccessToken,go})(App)
+export default connect(mapStateToProps,{setDbInventory,changeInventory,setFriends,setUser,setInitSuccess,getDbInventory,setAccessToken,go,setInventory})(App)

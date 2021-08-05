@@ -10,9 +10,18 @@ export const DB_TIMER_START = "startTimer";
 export const DB_TIMER_TIME = "timerTime";
 
 export  const firebaseAPI = {
+    
+    listenUpdateUser(userId,setInventory){
+        firebase.database().ref(String(userId)).on('value',function(snapshot){
+            var val = snapshot.val();
+            setInventory(val.inventory)
+          });
+    },
+
     updateUser(userId,item,count){
         firebase.database().ref(String(userId)).child("inventory").update({[item]:count})
     },
+    
     updateFullUser(userId,obj){
         firebase.database().ref(String(userId)).child("inventory").update(obj);
     },

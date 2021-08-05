@@ -3,7 +3,6 @@ import { CHANGE_ROKET } from "../redux/inventory-reducer"
 
 export const launchRoket = ({countRoket,UserId,inventoryTarget,changeInventory}) => {
     changeInventory(CHANGE_ROKET,-countRoket)
-    let _invTarget = inventoryTarget
     debugger
     if (countRoket <= 0) return
 

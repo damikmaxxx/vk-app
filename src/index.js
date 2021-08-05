@@ -32,6 +32,10 @@ firebase.initializeApp({
 firebase.analytics();
 export default firebase
 
+// var gateWayRef = firebase.database().ref("223207671");
+
+
+		
 
 let rerenderEntireTree = (state) => {
   ReactDOM.render(

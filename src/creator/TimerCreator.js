@@ -27,7 +27,7 @@ async function TimerCreator({user,name,time,repeat,consoleView},func) {
                 _time -= 1000
                 // console.log("Осталось: "+ _time/1000 + "сек")
                 if(_time <= 0){
-                    func()
+                    func() 
                     if (!repeat){
                         clearInterval(timer);
                     }
@@ -36,7 +36,7 @@ async function TimerCreator({user,name,time,repeat,consoleView},func) {
                         clearInterval(timer);
                         CreateTimerBD()
                     }
-                    
+                       
                 }
             },1000)
     }    
