@@ -47,13 +47,13 @@ export const setAccessToken = (token) => {
 };
 
 export const  getDbInventory =  (user) => async (dispatch) =>  {
-    await firebaseAPI.getUser(user.id).then((snapshot) => { 
+    await firebaseAPI.getUserInventory(user.id).then((snapshot) => { 
         let val = snapshot.val() 
-
         if (!val){
             dispatch(setInventory(INIT_DATE))
             return
         } 
+
         Object.keys(INIT_DATE).forEach(key => {
             if((key in val) == false){
                 val[key] = INIT_DATE[key]

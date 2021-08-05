@@ -5,6 +5,7 @@ import { Icon24DollarCircleOutline } from '@vkontakte/icons';
 import HeaderUser from '../components/Header/HeaderUser';
 import { setActiveUserPage } from '../redux/user-reducer';
 import { connect } from 'react-redux';
+import { go } from '../redux/app-reducer';
 const Friends = ({ id, go,friends,setActiveUserPage}) => {	
 	const entryFriendsProfile = (e,id) => {
 		setActiveUserPage(id)
@@ -36,4 +37,4 @@ const Friends = ({ id, go,friends,setActiveUserPage}) => {
 const mapStateToProps  = (state) => ({
 	friends:state.usersInfo.friends,
 })
-export default connect(mapStateToProps,{setActiveUserPage})(Friends)
+export default connect(mapStateToProps,{setActiveUserPage,go})(Friends)

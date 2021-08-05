@@ -31,32 +31,3 @@ export const go = e => (dispatch) => {
     dispatch(setActivePanel(e.currentTarget.dataset.to))
     
 };
-
-
-// export const  getDbInventory =  (user) => async (dispatch) =>  {
-//     await firebaseAPI.getUser(user.id).then((snapshot) => { 
-//         let val = snapshot.val() 
-
-//         if (!val){
-//             dispatch(setInventory(INIT_DATE))
-//             return
-//         } 
-//         Object.keys(INIT_DATE).forEach(key => {
-//             if((key in val) == false){
-//                 val[key] = INIT_DATE[key]
-//             }
-                
-//         })
-//         dispatch(setInventory(val))
-//         return
-//     })
-// };
-// export const  setDbInventory =  (user,inventory) => async (dispatch) =>  {
-//     await firebaseAPI.updateFullUser(user.id,{
-//         [DB_USER_MONEY]:inventory.money,
-//         [DB_USER_ROKET]:inventory.roket,
-//         [DB_USER_HOUSE]:inventory.house,
-//         [DB_USER_PEOPLE]:inventory.people,
-//         [DB_USER_FOOD]:inventory.food,
-//     })
-// };

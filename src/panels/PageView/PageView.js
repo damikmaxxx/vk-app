@@ -6,13 +6,14 @@ import { INIT_DATE } from '../../redux/auth-reducer';
 import { firebaseAPI } from '../../api/api';
 import AttackUserPage from '../Action/Attack/AttackUserPage';
 import CheckUserInfo from './CheckUserInfo';
-const PageView = ({ id, go,activeUserPage,}) => {
+import { go } from '../../redux/app-reducer';
+const PageView = ({ id, go,activeUserPage}) => {
     const [activeTabs,setActiveTabs] = useState('check');	
     const [getUserInfo,setGetUserInfo] = useState(null);
     
     useEffect(() => {
         const getUser = async () => {
-            await firebaseAPI.getUser(activeUserPage).then((snapshot) => { 
+            await firebaseAPI.getUserInventory(activeUserPage).then((snapshot) => { 
                 const val = snapshot.val()
                 if (val == null){
                     firebaseAPI.updateFullUser(activeUserPage,INIT_DATE)
@@ -59,5 +60,4 @@ const mapStateToProps  = (state) => ({
 	activeUserPage:state.usersInfo.activeUserPage,
 	friends:state.usersInfo.friends,
 })
-export default connect(mapStateToProps)(PageView)
-// export default AttackUserPage;
+export default connect(mapStateToProps,{go})(PageView)

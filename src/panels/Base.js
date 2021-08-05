@@ -1,8 +1,8 @@
 import { Button, Div, Group, Header, Panel } from '@vkontakte/vkui';
 import React from 'react';
+import { connect } from 'react-redux';
 import HeaderUser from '../components/Header/HeaderUser';
-import { firebaseAPI } from '../api/api';
-import { API_USER_MONEY } from '../api/api'
+import { go } from '../redux/app-reducer';
 const Base = ({ id, go}) => {
 	
 	
@@ -36,4 +36,6 @@ const Base = ({ id, go}) => {
 	
 
 
-export default Base;
+let mapStateToProps = (state) => ({
+})
+export default connect(mapStateToProps,{go})(Base)

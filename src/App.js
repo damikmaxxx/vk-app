@@ -94,23 +94,23 @@ const App = (props) => {
 		const name = String(key)
 		const id = name.charAt(0).toLowerCase() + name.slice(1);
 		return(
-			<DescPanel key={id} {...props} id={id}  go={props.go}/>
-		)
-		
+			<DescPanel key={id}  id={id}  go={props.go}/>
+		)	
 	})
 	return (
 		<AdaptivityProvider>
 			<AppRoot>
 				<View activePanel={props.activePanel} popout={popout}>
-					<Home {...props} id='home'  go={props.go} />
-					<Base {...props} id='base'  go={props.go} />
-					<Inventory {...props} id='inventory'  go={props.go} />
-					<Friends {...props} id='friends'  go={props.go} />
+					<Home id='home'  />
+					<Base id='base'  />
+					<Inventory id='inventory'/>
+					<Friends id='friends'/>
 
 					{/* Action Navigator */}
-					<ActionNavigator {...props} id='actionNavigator'  go={props.go}/>
-					<Attack {...props} id='attack'  go={props.go}/>
-					<PageView {...props} id='pageView'   go={props.go}/>
+					<ActionNavigator id='actionNavigator'/>
+					<Attack id='attack' />
+					<PageView id='pageView'/>
+					
 					{/* Descriprion */}
 					{DescPanelsBlocks}
 				</View>
@@ -121,8 +121,6 @@ const App = (props) => {
 
 let mapStateToProps = (state) => ({
 	inventory:state.myInventory,
-	activeUserPage:state.usersInfo.activeUserPage,
-	friends:state.usersInfo.friends,
 	user:state.usersInfo.user,
 	init:state.auth.init,
 	activePanel:state.appPage.activePanel,

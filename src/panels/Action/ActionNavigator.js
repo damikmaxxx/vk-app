@@ -2,8 +2,10 @@ import React from 'react';
 import * as axios from "axios";
 import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar,PanelHeaderBack } from '@vkontakte/vkui';
 import { Icon24DollarCircleOutline } from '@vkontakte/icons';
-import { CHANGE_MONEY,CHANGE_ROKET } from '../../redux/inventory-reducer';
+import { changeInventory, CHANGE_MONEY,CHANGE_ROKET } from '../../redux/inventory-reducer';
 import HeaderUser from '../../components/Header/HeaderUser';
+import { go } from '../../redux/app-reducer';
+import { connect } from 'react-redux';
 
 
 const ActionNavigator = ({changeInventory,go,id}) => {
@@ -40,5 +42,7 @@ const ActionNavigator = ({changeInventory,go,id}) => {
 };
 
 
+let mapStateToProps = (state) => ({
+})
 
-export default ActionNavigator
+export default connect(mapStateToProps,{go,changeInventory})(ActionNavigator)

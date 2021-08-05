@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import AttackFriends from './AttackFriends';
 import AttackOther from './AttackOther';
 import HeaderUser from '../../../components/Header/HeaderUser';
+import { go } from '../../../redux/app-reducer';
 
 
 const Attack = ({go,id,friends}) => {
@@ -34,5 +35,6 @@ const Attack = ({go,id,friends}) => {
 	</Panel>)
 };
 
-
-export default Attack
+let mapStateToProps = (state) => ({
+})
+export default connect(mapStateToProps,{go})(Attack)

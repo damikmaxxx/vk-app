@@ -33,7 +33,7 @@ export  const firebaseAPI = {
     getServerTime(){
         return firebase.database().ref("/.info/serverTimeOffset")
     },
-    getUser(userId){
+    getUserInventory(userId){
        return firebase.database().ref(String(userId)).child("inventory").get()
     },
     getTimeUserBD(userId){

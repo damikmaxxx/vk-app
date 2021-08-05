@@ -9,7 +9,7 @@ import { Icon28MortarOutline } from '@vkontakte/icons';
 import HeaderUser from '../components/Header/HeaderUser';
 
 import { connect } from "react-redux";
-
+import { go } from '../redux/app-reducer';
 
 const ImgSize = {
     width:30,
@@ -51,4 +51,4 @@ let mapStateToProps = (state) => ({
     inventory:state.myInventory
 })
 
-export default connect(mapStateToProps)(Inventory)
+export default connect(mapStateToProps,{go})(Inventory)
