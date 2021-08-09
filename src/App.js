@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import bridge from '@vkontakte/vk-bridge';
-import { View, ScreenSpinner, AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
+import { View, ScreenSpinner, AdaptivityProvider, AppRoot, ModalRoot, ModalCard, Button, Gradient, PanelHeaderButton, PanelHeaderClose, SimpleCell, ModalPage, ModalPageHeader, Title, Group, Header } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { connect } from "react-redux";
 import {changeInventory, CHANGE_MONEY,CHANGE_ROKET, setInventory} from "./redux/inventory-reducer"
@@ -21,16 +21,26 @@ import Attack from './panels/Action/Attack/Attack';
 import DescriptionCreator from './creator/DescriptionCreator';
 
 import { firebaseAPI } from './api/api';
-import { getDbInventory, setAccessToken, setInitSuccess,setDbInventory } from './redux/auth-reducer';
+import { getDbInventory, setAccessToken, setInitSuccess,setDbInventory, getBdUnseenInfo, listensFunc } from './redux/auth-reducer';
 import firebase from './index';
 import TimerCreator from './creator/TimerCreator';
 import AttackUserPage from './panels/Action/Attack/AttackUserPage';
 import PageView from './panels/PageView/PageView';
-import { go } from './redux/app-reducer';
+import { go, modalGo, MODAL_PAGE_DEFENSE_INFO} from './redux/app-reducer';
+import { Icon56NotificationOutline } from '@vkontakte/icons';
+import ModalDefenseInfo from './components/modalWindow/modalDefenseInfo'
+
 const APP_ID = 7903112;
+
 const App = (props) => {
 	const [giveGold, setGiveGold] = useState(null);
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
+	const modal = (
+		<ModalRoot  activeModal={props.activeModal} onClose={() => {props.modalGo(null,props.user.id)}}>
+			<ModalDefenseInfo  id={MODAL_PAGE_DEFENSE_INFO} />
+		</ModalRoot>
+	  );
+
 	useEffect(() => {
 		bridge.subscribe(({ detail: { type, data }}) => {
 			if (type === 'VKWebAppUpdateConfig') {
@@ -54,7 +64,7 @@ const App = (props) => {
 			
 			await props.getDbInventory(user.id)
 
-			
+			await props.getBdUnseenInfo(user.id)
 
 			props.setInitSuccess()
 			setPopout(null);
@@ -69,23 +79,23 @@ const App = (props) => {
 	useEffect(() => {
 		if (!props.init) return
 		async function initTimer() {
-			
-			setGiveGold(TimerCreator({"name":"increaseMoney","time":1*20*1000,"user":props.user,"repeat":true},() => {
-				props.changeInventory(CHANGE_MONEY,+10)
-			}))
+			// setGiveGold(TimerCreator({"name":"increaseMoney","time":1*20*1000,"user":props.user,"repeat":true},() => {
+			// 	props.changeInventory(CHANGE_MONEY,+10)
+			// }))
 		}
 		initTimer()
-		firebaseAPI.listenUpdateUser(props.user.id,props.setInventory)
-		debugger
+		firebaseAPI.listenUpdateUser(props.user.id,props.listensFunc)
+
+		
 	},[props.init])
+
 	useEffect(() => {
 		if (props.init){
 			props.setDbInventory(props.user.id,props.inventory)
 		}
 	})
 
-
-
+	
 	
 	//DescriptionCreator creates group with description
 	const DescriptionPanels = {
@@ -106,9 +116,9 @@ const App = (props) => {
 	return (
 		<AdaptivityProvider>
 			<AppRoot>
-				<View activePanel={props.activePanel} popout={popout}>
+				<View activePanel={props.activePanel} popout={popout} modal={modal}>
 					<Home id='home'  />
-					<Base id='base'  />
+					<Base id='base'/>
 					<Inventory id='inventory'/>
 					<Friends id='friends'/>
 
@@ -130,6 +140,8 @@ let mapStateToProps = (state) => ({
 	user:state.usersInfo.user,
 	init:state.auth.init,
 	activePanel:state.appPage.activePanel,
+	activeModal:state.appPage.activeModal,
+	unseen:state.usersInfo.unseen,
 })
 
-export default connect(mapStateToProps,{setDbInventory,changeInventory,setFriends,setUser,setInitSuccess,getDbInventory,setAccessToken,go,setInventory})(App)
+export default connect(mapStateToProps,{setDbInventory,changeInventory,setFriends,setUser,setInitSuccess,getDbInventory,setAccessToken,go,setInventory,modalGo,getBdUnseenInfo,listensFunc})(App)

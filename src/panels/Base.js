@@ -1,12 +1,10 @@
-import { Button, Div, Group, Header, Panel } from '@vkontakte/vkui';
+import { Button, Div, Group, Header, ModalCard, Panel, Textarea } from '@vkontakte/vkui';
 import React from 'react';
 import { connect } from 'react-redux';
+import { MODAL_CARD_NOTIFICATIONS } from '../App';
 import HeaderUser from '../components/Header/HeaderUser';
-import { go } from '../redux/app-reducer';
-const Base = ({ id, go}) => {
-	
-	
-	
+import { go, modalGo, MODAL_PAGE_DEFENSE_INFO } from '../redux/app-reducer';
+const Base = ({ id, go, modalGo}) => {
 	return(
 	
 	<Panel id={id}>
@@ -14,7 +12,7 @@ const Base = ({ id, go}) => {
 
 		<Group header={<Header mode="secondary">Navigation</Header>}>
 			<Div>
-				<Button stretched size="l"  onClick={go} data-to="inventory">
+				<Button stretched size="l"  onClick={go} data-to="inventory" >
 					Inventory
 				</Button>
 			</Div>
@@ -38,4 +36,4 @@ const Base = ({ id, go}) => {
 
 let mapStateToProps = (state) => ({
 })
-export default connect(mapStateToProps,{go})(Base)
+export default connect(mapStateToProps,{go,modalGo})(Base)
