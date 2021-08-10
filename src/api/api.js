@@ -41,8 +41,6 @@ export  const firebaseAPI = {
             serverTime = Date.now() + offsetVal;
         });
         firebase.database().ref(String(userId)).child("unseenInfo").child("defend").child(String(attackingUser)).update({timeAttack:serverTime,attack:roketAttack,destroyed:sendInfoDefend});
-        // firebase.database().ref(String(userId)).child("unseenInfo").child("defend").child(String(attackingUser)).update({});
-        // firebase.database().ref(String(userId)).child("unseenInfo").child("defend").child(String(attackingUser)).child("").update();
     },
     updateClearUnseen(userId){
         firebase.database().ref(String(userId)).child("unseenInfo").child("defend").remove();

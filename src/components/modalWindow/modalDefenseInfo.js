@@ -9,11 +9,6 @@ const ModalDefenseInfo = ({ id,unseen,friends}) => {
     if(!unseen){
         return <ModalCard  id={id}></ModalCard>
     }
-    const activeUserPage = Number(Object.keys(unseen.defend)[0])
-    const timeAttack = Number(unseen.defend[activeUserPage].timeAttack)
-    const attackRoket = Number(unseen.defend[activeUserPage].attack) 
-    const destroyed = unseen.defend[activeUserPage].destroyed 
-    const userPageInfo = friends.find(user => user.id == activeUserPage) 
     const PictureName = {
         money:Icon24DollarCircleOutline,
         people:Icon44SmileOutline,
@@ -21,23 +16,27 @@ const ModalDefenseInfo = ({ id,unseen,friends}) => {
         roket:Icon24SendOutline,
         food:Icon28MortarOutline,
     }
-    const inv = Object.keys(destroyed).map(key =>{
-        const Pic = PictureName[key]
+    const attackUser =  Object.keys(unseen.defend).map(id => {
+        const time = Number(unseen.defend[id].timeAttack)
+        const timeAttack =new Date(time).toLocaleString('en-GB', { timeZone: 'UTC' });
+        const attackRoket = Number(unseen.defend[id].attack) 
+        const destroyed = unseen.defend[id].destroyed 
+        const userPageInfo = friends.find(user => user.id == id)
+        const inv = Object.keys(destroyed).map(key =>{
+            const Pic = PictureName[key]
+            return(
+                <HorizontalCell key={key} size='s' header={<div style={{textAlign:"center"}}>{destroyed[key]}</div>}>
+                    <Pic width={25} height={25}/>
+                </HorizontalCell>
+            )    
+        })
         return(
-            <HorizontalCell key={key} size='s' header={<div style={{textAlign:"center"}}>{destroyed[key]}</div>}>
-                <Pic width={25} height={25}/>
-            </HorizontalCell>
-        )    
-    })
-    
-    return(
-        <ModalCard id={id} header={"Defend info"}>
-            <Group header={<Header mode="secondary">User info</Header>}>
+            <Group key={id} header={<Header mode="secondary">User info</Header>}>
                 <Cell 
                     before={userPageInfo?.photo_200_orig ? <Avatar src={userPageInfo.photo_200_orig}/> : null}
                     description={userPageInfo.city && userPageInfo.city.title ? userPageInfo.city.title : ''}
                     after={<div style={{display:'flex',alignItems:'center',color:'black'}}>{attackRoket}<Icon24SendOutline width={20} height={20}/></div>}
-                    description={timeAttack}
+                    description={"последнее нападение: "+ timeAttack}
                 >
                     {`${userPageInfo.first_name} ${userPageInfo.last_name}`}
                 </Cell>
@@ -48,6 +47,16 @@ const ModalDefenseInfo = ({ id,unseen,friends}) => {
                     </div>
                 </HorizontalScroll>
             </Group>
+        )
+    })
+     
+    
+    
+    
+    return(
+        <ModalCard id={id} header={"Defend info"}>
+                {attackUser}
+            
         </ModalCard>
     )
 }
