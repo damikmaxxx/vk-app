@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Group, Card,CardGrid, RichCell, Avatar } from '@vkontakte/vkui';
 import { Icon24DollarCircleOutline } from '@vkontakte/icons';
 import { connect } from 'react-redux';
-import { setActiveUserPage } from '../../../redux/user-reducer';
+
 
 const AttackFriends = ({friends,go,setActiveUserPage}) => {
 	const entryFriendsProfile = (e,id) => {
@@ -27,8 +27,5 @@ const AttackFriends = ({friends,go,setActiveUserPage}) => {
         </Group>
 	)
 };
-const mapStateToProps  = (state) => ({
-	friends:state.usersInfo.friends,
-})
-export default connect(mapStateToProps,{setActiveUserPage})(AttackFriends)
-// export default AttackFriends
+
+export default AttackFriends

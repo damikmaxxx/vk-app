@@ -1,5 +1,5 @@
 export const DB_USER_MONEY = "money";
-export const DB_USER_ROKET = "roket";
+export const DB_USER_ROCKET = "rocket";
 export const DB_USER_HOUSE = "house";
 export const DB_USER_PEOPLE = "people";
 export const DB_USER_FOOD = "food";
@@ -34,13 +34,13 @@ export  const firebaseAPI = {
     updateTimerDB(userId,timerName,info,time){
         firebase.database().ref(String(userId)).child("time").child("timer").child(timerName).update({[info]:time});
     },
-    async updateUnseenDefendInfo({userId,attackingUser,sendInfoDefend,roketAttack}){
+    async updateUnseenDefendInfo({userId,attackingUser,sendInfoDefend,rocketAttack}){
         let serverTime = 0
         await firebaseAPI.getServerTime().on('value', function(offset) {
             const offsetVal = offset.val() || 0;
             serverTime = Date.now() + offsetVal;
         });
-        firebase.database().ref(String(userId)).child("unseenInfo").child("defend").child(String(attackingUser)).update({timeAttack:serverTime,attack:roketAttack,destroyed:sendInfoDefend});
+        firebase.database().ref(String(userId)).child("unseenInfo").child("defend").child(String(attackingUser)).update({timeAttack:serverTime,attack:rocketAttack,destroyed:sendInfoDefend});
     },
     updateClearUnseen(userId){
         firebase.database().ref(String(userId)).child("unseenInfo").child("defend").remove();

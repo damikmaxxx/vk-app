@@ -2,7 +2,7 @@ import React from 'react';
 import * as axios from "axios";
 import { Panel, PanelHeader, Header, Button, Group, Cell, Div, Avatar,PanelHeaderBack } from '@vkontakte/vkui';
 import { Icon24DollarCircleOutline } from '@vkontakte/icons';
-import { changeInventory, CHANGE_MONEY,CHANGE_ROKET } from '../../redux/inventory-reducer';
+import { changeInventory, CHANGE_MONEY,CHANGE_ROCKET } from '../../redux/inventory-reducer';
 import HeaderUser from '../../components/Header/HeaderUser';
 import { go } from '../../redux/app-reducer';
 import { connect } from 'react-redux';
@@ -12,27 +12,23 @@ const ActionNavigator = ({changeInventory,go,id}) => {
 	const  onChangeMoney = (num) => {
 		changeInventory(CHANGE_MONEY,num)
 	}
-	const  Attack = (e) => {
-		changeInventory(CHANGE_ROKET,-1)
-		go(e)
-	}
 	return(
 	<Panel id={id}>
         <HeaderUser  go={go}headerName="Action Navigator" backButton="base"/>
         <Group header={<Header mode="secondary">Your actions</Header>}>
             <Div>
 				<Button stretched size="l"  onClick={() => onChangeMoney(-10)}>
-                Building
+                	Building
 				</Button>
 			</Div>
             <Div>
-				<Button stretched size="l"  onClick={Attack} data-to="attack">
-                Attack
+				<Button stretched size="l"  onClick={go} data-to="attack">
+                	Attack
 				</Button>
 			</Div>
             <Div>
-				<Button stretched size="l"  onClick={() => onChangeMoney(-10)}>
-                Defense
+				<Button stretched size="l" onClick={go} data-to="defense" >
+                	Defense
 				</Button>
 			</Div>
         </Group> 

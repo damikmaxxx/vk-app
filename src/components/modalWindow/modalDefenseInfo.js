@@ -5,25 +5,22 @@ import { Icon44SmileOutline } from '@vkontakte/icons';
 import { Icon24HomeOutline } from '@vkontakte/icons';
 import { Icon24SendOutline } from '@vkontakte/icons';
 import { Icon28MortarOutline } from '@vkontakte/icons';
+import { PICTURE_NAME } from "../../panels/Inventory";
+
 const ModalDefenseInfo = ({ id,unseen,friends}) => {
     if(!unseen){
         return <ModalCard  id={id}></ModalCard>
     }
-    const PictureName = {
-        money:Icon24DollarCircleOutline,
-        people:Icon44SmileOutline,
-        house:Icon24HomeOutline,
-        roket:Icon24SendOutline,
-        food:Icon28MortarOutline,
-    }
+    // unseen.defend длина 
+    // атака 1 из длина
     const attackUser =  Object.keys(unseen.defend).map(id => {
         const time = Number(unseen.defend[id].timeAttack)
-        const timeAttack =new Date(time).toLocaleString('en-GB', { timeZone: 'UTC' });
-        const attackRoket = Number(unseen.defend[id].attack) 
+        const timeAttack = new Date(time).toLocaleString('en-GB', { timeZone: 'UTC' });
+        const attackRocket = Number(unseen.defend[id].attack) 
         const destroyed = unseen.defend[id].destroyed 
         const userPageInfo = friends.find(user => user.id == id)
         const inv = Object.keys(destroyed).map(key =>{
-            const Pic = PictureName[key]
+            const Pic = PICTURE_NAME[key]
             return(
                 <HorizontalCell key={key} size='s' header={<div style={{textAlign:"center"}}>{destroyed[key]}</div>}>
                     <Pic width={25} height={25}/>
@@ -35,7 +32,7 @@ const ModalDefenseInfo = ({ id,unseen,friends}) => {
                 <Cell 
                     before={userPageInfo?.photo_200_orig ? <Avatar src={userPageInfo.photo_200_orig}/> : null}
                     description={userPageInfo.city && userPageInfo.city.title ? userPageInfo.city.title : ''}
-                    after={<div style={{display:'flex',alignItems:'center',color:'black'}}>{attackRoket}<Icon24SendOutline width={20} height={20}/></div>}
+                    after={<div style={{display:'flex',alignItems:'center',color:'black'}}>{attackRocket}<Icon24SendOutline width={20} height={20}/></div>}
                     description={"последнее нападение: "+ timeAttack}
                 >
                     {`${userPageInfo.first_name} ${userPageInfo.last_name}`}

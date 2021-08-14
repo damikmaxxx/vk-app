@@ -7,9 +7,10 @@ import AttackFriends from './AttackFriends';
 import AttackOther from './AttackOther';
 import HeaderUser from '../../../components/Header/HeaderUser';
 import { go } from '../../../redux/app-reducer';
-
+import { setActiveUserPage } from '../../../redux/user-reducer';
 
 const Attack = ({go,id,friends}) => {
+	
 	const [activeTabs,setActiveTabs] = useState('friends');
 	return(
 	<Panel id={id}>
@@ -27,7 +28,7 @@ const Attack = ({go,id,friends}) => {
 					other 
 				</TabsItem>
 			</Tabs>
-			{activeTabs === "friends" && <AttackFriends go={go} friends={friends}/> }
+			{activeTabs === "friends" && <AttackFriends go={go} friends={friends} setActiveUserPage={setActiveUserPage}/> }
 			{activeTabs === "other" && <AttackOther/>}
         </Group> 
         
@@ -36,5 +37,6 @@ const Attack = ({go,id,friends}) => {
 };
 
 let mapStateToProps = (state) => ({
+	friends:state.usersInfo.friends,
 })
-export default connect(mapStateToProps,{go})(Attack)
+export default connect(mapStateToProps,{go,setActiveUserPage})(Attack)

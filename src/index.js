@@ -9,16 +9,12 @@ import "firebase/database";
 
 
 
-//7903112
-
 // Init VK  Mini App
 bridge.send("VKWebAppInit");
 if (process.env.NODE_ENV === "development") {
   import("./eruda").then(({ default: eruda }) => {}); //runtime download
 }
 
-// Initialize Firebase
-// var firebaseConfig = ;
 // Initialize Firebase
 firebase.initializeApp({
   apiKey: "AIzaSyAaCTI89WAScNMKK-5pzGmt5qcnF50U6aM",

@@ -11,27 +11,28 @@ import HeaderUser from '../components/Header/HeaderUser';
 import { connect } from "react-redux";
 import { go } from '../redux/app-reducer';
 
+
+export  const PICTURE_NAME = {
+    money:Icon24DollarCircleOutline,
+    people:Icon44SmileOutline,
+    house:Icon24HomeOutline,
+    rocket:Icon24SendOutline,
+    food:Icon28MortarOutline,
+}
+
 const ImgSize = {
     width:30,
     height:30,
 }
-const PictureName = {
-    money:Icon24DollarCircleOutline,
-    people:Icon44SmileOutline,
-    house:Icon24HomeOutline,
-    roket:Icon24SendOutline,
-    food:Icon28MortarOutline,
-}
+
 const Inventory = ({ id, go,inventory }) => {
-    
     const inv = Object.keys(inventory).map(key =>{
-        const Pic = PictureName[key]
+        const Pic = PICTURE_NAME[key]
         return(
             <Group key={key} onClick={go} data-to={key + "Desc"}>
                 <SimpleCell>
                 <Header mode="secondary">{key}</Header>
                 <Div><div style={{display:'flex',alignItems:'center'}}>{inventory[key]}<Pic width={ImgSize.width} height={ImgSize.height}/></div>  </Div>
-                     
                 </SimpleCell>
             </Group>
         )    

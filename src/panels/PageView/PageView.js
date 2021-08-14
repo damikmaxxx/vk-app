@@ -9,7 +9,7 @@ import CheckUserInfo from './CheckUserInfo';
 import { go } from '../../redux/app-reducer';
 const PageView = ({ id, go,activeUserPage}) => {
     const [activeTabs,setActiveTabs] = useState('check');	
-    const [getUserInfo,setGetUserInfo] = useState(null);
+    const [UserInfo,setUserInfo] = useState(INIT_DATE);
     
     useEffect(() => {
         const getUser = async () => {
@@ -17,10 +17,10 @@ const PageView = ({ id, go,activeUserPage}) => {
                 const val = snapshot.val()
                 if (val == null){
                     firebaseAPI.updateFullUser(activeUserPage,INIT_DATE)
-                    setGetUserInfo(INIT_DATE)
+                    setUserInfo(INIT_DATE)
                 }
                 else{
-                    setGetUserInfo(val)
+                    setUserInfo(val)
                 }
                 
             })	
@@ -31,9 +31,9 @@ const PageView = ({ id, go,activeUserPage}) => {
     																																																																																					
     return(
         <Panel id={id}>
-            {getUserInfo ? 
+            {UserInfo ? 
             <>
-            <HeaderOther go={go} headerName="Profile" backButton="base" money={getUserInfo.money}/>
+            <HeaderOther go={go} headerName="Profile" backButton="base" money={UserInfo.money}/>
                 <Group header={<Header mode="secondary">Action</Header>}>
                     <Tabs>
                         <TabsItem selected={activeTabs === "check"} onClick={() => {
@@ -47,8 +47,8 @@ const PageView = ({ id, go,activeUserPage}) => {
                             attack 
                         </TabsItem>
                     </Tabs>
-                    {activeTabs === "check" && <CheckUserInfo  inventoryProfile={getUserInfo} go={go}/> }
-                    {activeTabs === "attack" && <AttackUserPage inventoryProfile={getUserInfo}/>}
+                    {activeTabs === "check" && <CheckUserInfo  inventoryProfile={UserInfo} go={go}/> }
+                    {activeTabs === "attack" && <AttackUserPage inventoryProfile={UserInfo}/>}
                 </Group> 
             </>
              : <ScreenSpinner size='large' />}
@@ -58,6 +58,5 @@ const PageView = ({ id, go,activeUserPage}) => {
 }
 const mapStateToProps  = (state) => ({
 	activeUserPage:state.usersInfo.activeUserPage,
-	friends:state.usersInfo.friends,
 })
 export default connect(mapStateToProps,{go})(PageView)

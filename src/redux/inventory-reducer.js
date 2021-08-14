@@ -1,14 +1,14 @@
 export const CHANGE_MONEY = "INVENTORY/CHANGE_MONEY"
 export const CHANGE_HOUSE = "INVENTORY/CHANGE_HOUSE"
 export const CHANGE_PEOPLE = "INVENTORY/CHANGE_PEOPLE"
-export const CHANGE_ROKET = "INVENTORY/CHANGE_ROKET"
+export const CHANGE_ROCKET = "INVENTORY/CHANGE_ROCKET"
 export const CHANGE_FOOD = "INVENTORY/CHANGE_FOOD"
 export const SET_INVENTORY = "INVENTORY/SET_INVENTORY"
 let init = {
     money:0,
     house:0,
     people:0,
-    roket:0,
+    rocket:0,
     food:0,
 };
 
@@ -29,10 +29,10 @@ export const inventoryReducer = (state = init, action) => {
                 ...state,
                 people:state.people + action.change,
             }
-        case CHANGE_ROKET:
+        case CHANGE_ROCKET:
             return {
                 ...state,
-                roket:state.roket + action.change,
+                rocket:state.rocket + action.change,
             }
         case CHANGE_FOOD:
             return {
@@ -64,9 +64,9 @@ export const changePeople = (change) => {
         change,
     };
 };
-export const changeRoket = (change) => {
+export const changeRocket = (change) => {
     return {
-        type: CHANGE_ROKET,
+        type: CHANGE_ROCKET,
         change,
     };
 };
@@ -88,8 +88,8 @@ export const changeInventory = (type,num) => {
         case CHANGE_PEOPLE:
             func = changePeople
             break
-        case CHANGE_ROKET:
-            func = changeRoket
+        case CHANGE_ROCKET:
+            func = changeRocket
             break
         case CHANGE_FOOD:
             func = changeFood

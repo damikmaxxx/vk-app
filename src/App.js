@@ -3,13 +3,13 @@ import bridge from '@vkontakte/vk-bridge';
 import { View, ScreenSpinner, AdaptivityProvider, AppRoot, ModalRoot, ModalCard, Button, Gradient, PanelHeaderButton, PanelHeaderClose, SimpleCell, ModalPage, ModalPageHeader, Title, Group, Header } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { connect } from "react-redux";
-import {changeInventory, CHANGE_MONEY,CHANGE_ROKET, setInventory} from "./redux/inventory-reducer"
+import {changeInventory, CHANGE_MONEY,CHANGE_ROCKET, setInventory} from "./redux/inventory-reducer"
 import {setFriends} from "./redux/user-reducer"
 import {setUser} from "./redux/user-reducer"
 
 
 //descriprion
-import { HOUSE_DESCRIPTION, MONEY_DESCRIPTION, PEOPLE_DESCRIPTION, ROKET_DESCRIPTION,FOOD_DESCRIPTION } from './text/Description';
+import { HOUSE_DESCRIPTION, MONEY_DESCRIPTION, PEOPLE_DESCRIPTION, ROCKET_DESCRIPTION,FOOD_DESCRIPTION } from './text/Description';
 
 import Home from './panels/Home';
 import Persik from './panels/Persik';
@@ -19,7 +19,6 @@ import Friends from './panels/Friends';
 import ActionNavigator from './panels/Action/ActionNavigator';
 import Attack from './panels/Action/Attack/Attack';
 import DescriptionCreator from './creator/DescriptionCreator';
-
 import { firebaseAPI } from './api/api';
 import { getDbInventory, setAccessToken, setInitSuccess,setDbInventory, getBdUnseenInfo, listensFunc } from './redux/auth-reducer';
 import firebase from './index';
@@ -29,6 +28,7 @@ import PageView from './panels/PageView/PageView';
 import { go, modalGo, MODAL_PAGE_DEFENSE_INFO} from './redux/app-reducer';
 import { Icon56NotificationOutline } from '@vkontakte/icons';
 import ModalDefenseInfo from './components/modalWindow/modalDefenseInfo'
+import Defense from './panels/Action/Defense/Defense';
 
 const APP_ID = 7903112;
 
@@ -79,9 +79,9 @@ const App = (props) => {
 	useEffect(() => {
 		if (!props.init) return
 		async function initTimer() {
-			// setGiveGold(TimerCreator({"name":"increaseMoney","time":1*20*1000,"user":props.user,"repeat":true},() => {
-			// 	props.changeInventory(CHANGE_MONEY,+10)
-			// }))
+			setGiveGold(TimerCreator({"name":"increaseMoney","time":1*20*1000,"user":props.user,"repeat":true},() => {
+				props.changeInventory(CHANGE_MONEY,+10)
+			}))
 		}
 		initTimer()
 		firebaseAPI.listenUpdateUser(props.user.id,props.listensFunc)
@@ -102,7 +102,7 @@ const App = (props) => {
 		MoneyDesc	:DescriptionCreator({what:"Money",desc:MONEY_DESCRIPTION}),
 		PeopleDesc	:DescriptionCreator({what:"People",desc:PEOPLE_DESCRIPTION}),
 		HouseDesc	:DescriptionCreator({what:"House",desc:HOUSE_DESCRIPTION}),
-		RoketDesc	:DescriptionCreator({what:"Roket",desc:ROKET_DESCRIPTION}),
+		rocketDesc	:DescriptionCreator({what:"rocket",desc:ROCKET_DESCRIPTION}),
 		FoodDesc	:DescriptionCreator({what:"Food",desc:FOOD_DESCRIPTION}),
 	}
 	const DescPanelsBlocks = Object.keys(DescriptionPanels).map(key => {
@@ -125,6 +125,7 @@ const App = (props) => {
 					{/* Action Navigator */}
 					<ActionNavigator id='actionNavigator'/>
 					<Attack id='attack' />
+					<Defense id='defense' />
 					<PageView id='pageView'/>
 					
 					{/* Descriprion */}
