@@ -9,6 +9,7 @@ import MoneyBackground from "../../assets/images/moneyBackground.jpg"
 import WorkerBackground from "../../assets/images/workerBackground.jpg"
 import styles from './PageView.module.css';
 import { PICTURE_NAME } from '../Inventory';
+import PropTypes from 'prop-types';
 // import { setActiveUserPage } from '../../redux/user-reducer';
 // import AttackUserPage from '../Action/Attack/AttackUserPage';
 
@@ -44,4 +45,9 @@ const CheckUserInfo = ({go,inventoryProfile}) => {
         </Group>
     )
 }
+CheckUserInfo.propTypes = {
+	go: PropTypes.func.isRequired,
+	inventoryProfile: PropTypes.object.isRequired,
+};
+
 export default CheckUserInfo

@@ -6,13 +6,11 @@ import { Icon24HomeOutline } from '@vkontakte/icons';
 import { Icon24SendOutline } from '@vkontakte/icons';
 import { Icon28MortarOutline } from '@vkontakte/icons';
 import { PICTURE_NAME } from "../../panels/Inventory";
-
+import PropTypes from 'prop-types';
 const ModalDefenseInfo = ({ id,unseen,friends}) => {
     if(!unseen){
         return <ModalCard  id={id}></ModalCard>
     }
-    // unseen.defend длина 
-    // атака 1 из длина
     const attackUser =  Object.keys(unseen.defend).map(id => {
         const time = Number(unseen.defend[id].timeAttack)
         const timeAttack = new Date(time).toLocaleString('en-GB', { timeZone: 'UTC' });
@@ -58,6 +56,11 @@ const ModalDefenseInfo = ({ id,unseen,friends}) => {
     )
 }
 
+ModalDefenseInfo.propTypes = {
+	id: PropTypes.string.isRequired,
+	go: PropTypes.func.isRequired,
+	friends: PropTypes.array,
+};
 
 let mapStateToProps = (state) => ({
     unseen:state.usersInfo.unseen,

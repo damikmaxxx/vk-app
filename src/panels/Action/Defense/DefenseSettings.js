@@ -7,8 +7,8 @@ const DefenseSettings = ({friends}) => {
 	return(
         <Group>
             <Header mode="secondary">Settings</Header>
-              <SimpleCell disabled after={<Switch defaultChecked />}>Use rockets for defense</SimpleCell>
-              <SimpleCell disabled after={<Switch />}>...</SimpleCell>
+              <SimpleCell disabled after={<Switch defaultChecked />}>Use rockets for defense (no effect)</SimpleCell>
+              <SimpleCell disabled after={<Switch />}>... (no effect)</SimpleCell>
         </Group>
 	)
 };

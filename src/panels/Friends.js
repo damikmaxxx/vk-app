@@ -37,4 +37,11 @@ const Friends = ({ id, go,friends,setActiveUserPage}) => {
 const mapStateToProps  = (state) => ({
 	friends:state.usersInfo.friends,
 })
+
+Friends.propTypes = {
+	id: PropTypes.string.isRequired,
+	go: PropTypes.func.isRequired,
+	friends: PropTypes.array,
+	setActiveUserPage:PropTypes.func.isRequired,
+};
 export default connect(mapStateToProps,{setActiveUserPage,go})(Friends)

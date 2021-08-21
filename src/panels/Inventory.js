@@ -51,5 +51,9 @@ let mapStateToProps = (state) => ({
 	init:state.auth.init,
     inventory:state.myInventory
 })
-
+Inventory.propTypes = {
+	id: PropTypes.string.isRequired,
+	go: PropTypes.func.isRequired,
+	inventory: PropTypes.object.isRequired,
+};
 export default connect(mapStateToProps,{go})(Inventory)

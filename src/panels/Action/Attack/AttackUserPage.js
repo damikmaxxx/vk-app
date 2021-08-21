@@ -1,9 +1,10 @@
 import { Button, Counter, Div, FormItem, Group, Input, Slider } from '@vkontakte/vkui';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { launchRocket } from '../../../actionCalculation/launchRocket';
+import { launchRocket } from '../../../lib/actionCalculation/launchRocket';
 import { changeInventory } from '../../../redux/inventory-reducer';
 import { setActiveUserPage } from '../../../redux/user-reducer';
+import PropTypes from 'prop-types';
 const AttackUserPage = ({activeUserPage,rocket,inventoryProfile,changeInventory,user}) => {
     const [rocketSend,setRocketSend] = useState(1)
     const rocketSendUpdate = (num) => {
@@ -60,5 +61,13 @@ const mapStateToProps  = (state) => ({
 	friends:state.usersInfo.friends,
     user:state.usersInfo.user,
 })
+
+AttackUserPage.propTypes = {
+	activeUserPage: PropTypes.number.isRequired,
+	friends: PropTypes.array,
+    rocket:PropTypes.number.isRequired,
+    user:PropTypes.object.isRequired
+};
+
 export default connect(mapStateToProps,{setActiveUserPage,changeInventory})(AttackUserPage)
 // export default AttackUserPage;

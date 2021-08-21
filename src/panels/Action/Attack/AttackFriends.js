@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Group, Card,CardGrid, RichCell, Avatar } from '@vkontakte/vkui';
 import { Icon24DollarCircleOutline } from '@vkontakte/icons';
 import { connect } from 'react-redux';
-
+import PropTypes from 'prop-types';
 
 const AttackFriends = ({friends,go,setActiveUserPage}) => {
 	const entryFriendsProfile = (e,id) => {
@@ -26,6 +26,12 @@ const AttackFriends = ({friends,go,setActiveUserPage}) => {
 						{friendsGroup}
         </Group>
 	)
+};
+
+AttackFriends.propTypes = {
+	setActiveUserPage: PropTypes.func.isRequired,
+	go: PropTypes.func.isRequired,
+	friends: PropTypes.array,
 };
 
 export default AttackFriends

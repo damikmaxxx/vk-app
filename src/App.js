@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import bridge from '@vkontakte/vk-bridge';
-import { View, ScreenSpinner, AdaptivityProvider, AppRoot, ModalRoot, ModalCard, Button, Gradient, PanelHeaderButton, PanelHeaderClose, SimpleCell, ModalPage, ModalPageHeader, Title, Group, Header } from '@vkontakte/vkui';
+import { View, ScreenSpinner, AdaptivityProvider, AppRoot, ModalRoot, ModalCard, Button, Gradient, PanelHeaderButton, PanelHeaderClose, SimpleCell, ModalPage, ModalPageHeader, Title, Group, Header, withAdaptivity, ConfigProvider } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { connect } from "react-redux";
 import {changeInventory, CHANGE_MONEY,CHANGE_ROCKET, setInventory} from "./redux/inventory-reducer"
@@ -9,30 +9,25 @@ import {setUser} from "./redux/user-reducer"
 
 
 //descriprion
-import { HOUSE_DESCRIPTION, MONEY_DESCRIPTION, PEOPLE_DESCRIPTION, ROCKET_DESCRIPTION,FOOD_DESCRIPTION } from './text/Description';
+import { HOUSE_DESCRIPTION, MONEY_DESCRIPTION, PEOPLE_DESCRIPTION, ROCKET_DESCRIPTION,FOOD_DESCRIPTION } from './lib/text/Description';
 
 import Home from './panels/Home';
-import Persik from './panels/Persik';
 import Base from './panels/Base';
 import Inventory from './panels/Inventory';
 import Friends from './panels/Friends';
 import ActionNavigator from './panels/Action/ActionNavigator';
 import Attack from './panels/Action/Attack/Attack';
-import DescriptionCreator from './creator/DescriptionCreator';
+import DescriptionCreator from './lib/creator/DescriptionCreator';
 import { firebaseAPI } from './api/api';
 import { getDbInventory, setAccessToken, setInitSuccess,setDbInventory, getBdUnseenInfo, listensFunc } from './redux/auth-reducer';
-import firebase from './index';
-import TimerCreator from './creator/TimerCreator';
-import AttackUserPage from './panels/Action/Attack/AttackUserPage';
+import TimerCreator from './lib/creator/TimerCreator';
 import PageView from './panels/PageView/PageView';
 import { go, modalGo, MODAL_PAGE_DEFENSE_INFO} from './redux/app-reducer';
-import { Icon56NotificationOutline } from '@vkontakte/icons';
 import ModalDefenseInfo from './components/modalWindow/modalDefenseInfo'
 import Defense from './panels/Action/Defense/Defense';
-
 const APP_ID = 7903112;
 
-const App = (props) => {
+let App = (props) => {
 	const [giveGold, setGiveGold] = useState(null);
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
 	const modal = (
@@ -114,25 +109,27 @@ const App = (props) => {
 		)	
 	})
 	return (
-		<AdaptivityProvider>
-			<AppRoot>
-				<View activePanel={props.activePanel} popout={popout} modal={modal}>
-					<Home id='home'  />
-					<Base id='base'/>
-					<Inventory id='inventory'/>
-					<Friends id='friends'/>
+		<ConfigProvider>
+			<AdaptivityProvider>
+				<AppRoot>
+					<View activePanel={props.activePanel} popout={popout} modal={modal}>
+						<Home id='home'  />
+						<Base id='base'/>
+						<Inventory id='inventory'/>
+						<Friends id='friends'/>
 
-					{/* Action Navigator */}
-					<ActionNavigator id='actionNavigator'/>
-					<Attack id='attack' />
-					<Defense id='defense' />
-					<PageView id='pageView'/>
-					
-					{/* Descriprion */}
-					{DescPanelsBlocks}
-				</View>
-			</AppRoot>
-		</AdaptivityProvider>
+						{/* Action Navigator */}
+						<ActionNavigator id='actionNavigator'/>
+						<Attack id='attack' />
+						<Defense id='defense' />
+						<PageView id='pageView'/>
+						
+						{/* Descriprion */}
+						{DescPanelsBlocks}
+					</View>
+				</AppRoot>
+			</AdaptivityProvider>
+		</ConfigProvider>
 	);
 }
 
@@ -144,5 +141,5 @@ let mapStateToProps = (state) => ({
 	activeModal:state.appPage.activeModal,
 	unseen:state.usersInfo.unseen,
 })
-
+	// App = withAdaptivity(App);
 export default connect(mapStateToProps,{setDbInventory,changeInventory,setFriends,setUser,setInitSuccess,getDbInventory,setAccessToken,go,setInventory,modalGo,getBdUnseenInfo,listensFunc})(App)

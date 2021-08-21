@@ -6,6 +6,7 @@ import { changeInventory, CHANGE_MONEY,CHANGE_ROCKET } from '../../redux/invento
 import HeaderUser from '../../components/Header/HeaderUser';
 import { go } from '../../redux/app-reducer';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 
 const ActionNavigator = ({changeInventory,go,id}) => {
@@ -35,6 +36,12 @@ const ActionNavigator = ({changeInventory,go,id}) => {
         
         
 	</Panel>)
+};
+
+ActionNavigator.propTypes = {
+	id: PropTypes.string.isRequired,
+	go: PropTypes.func.isRequired,
+	changeInventory: PropTypes.func.isRequired,
 };
 
 

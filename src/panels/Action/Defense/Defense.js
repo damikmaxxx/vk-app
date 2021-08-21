@@ -36,6 +36,12 @@ const Defense = ({go,id,friends}) => {
 	</Panel>)
 };
 
+Defense.propTypes = {
+	id: PropTypes.string.isRequired,
+	go: PropTypes.func.isRequired,
+	friends: PropTypes.array,
+};
+
 let mapStateToProps = (state) => ({
     friends:state.usersInfo.friends,
 })

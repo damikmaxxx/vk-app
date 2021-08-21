@@ -1,5 +1,5 @@
-import { DB_USER_ROCKET, firebaseAPI } from "../api/api"
-import { CHANGE_ROCKET } from "../redux/inventory-reducer"
+import { DB_USER_ROCKET, firebaseAPI } from "../../api/api"
+import { CHANGE_ROCKET } from "../../redux/inventory-reducer"
 
 export const launchRocket = async ({countRocket,userIdTarget,inventoryTarget,attackingUser,changeInventory}) => {
     let startCountRocket = countRocket

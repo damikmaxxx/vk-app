@@ -1,4 +1,4 @@
-import { firebaseAPI,DB_TIMER_START, DB_TIMER_TIME } from '../api/api';
+import { firebaseAPI,DB_TIMER_START, DB_TIMER_TIME } from '../../api/api';
 
 async function TimerCreator({user,name,time,repeat,consoleView},func) {
     let _time = time

@@ -7,6 +7,7 @@ import { firebaseAPI } from '../../api/api';
 import AttackUserPage from '../Action/Attack/AttackUserPage';
 import CheckUserInfo from './CheckUserInfo';
 import { go } from '../../redux/app-reducer';
+import PropTypes from 'prop-types';
 const PageView = ({ id, go,activeUserPage}) => {
     const [activeTabs,setActiveTabs] = useState('check');	
     const [UserInfo,setUserInfo] = useState(INIT_DATE);
@@ -59,4 +60,11 @@ const PageView = ({ id, go,activeUserPage}) => {
 const mapStateToProps  = (state) => ({
 	activeUserPage:state.usersInfo.activeUserPage,
 })
+
+PageView.propTypes = {
+	id: PropTypes.string.isRequired,
+	go: PropTypes.func.isRequired,
+	friends: PropTypes.array,
+	activeUserPage:PropTypes.number.isRequired,
+};
 export default connect(mapStateToProps,{go})(PageView)
